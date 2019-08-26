@@ -1,3 +1,5 @@
+import java.util.Random;
+
 class Game2048{
   private final int size=4;
 
@@ -71,9 +73,13 @@ class Game2048{
       }
 
     }}
+    spawn();
   }
 	
-
+  private void spawn(){
+    
+    
+  }
 	public boolean evaluate(){
 
 		return true;
