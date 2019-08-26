@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 class Main{
 
 	public static void main(String args[]){
@@ -5,19 +7,19 @@ class Main{
 		Player player = new Player("James");
 
 		String userInput = player.getMove();
+    Scanner input = new Scanner(System.in);
 
-		while((userInput == "RIGHT") && (game.evaluate()) ){
-      game.print();
-      System.out.println("\n");
+    System.out.println("Welcome to 2048.");
+    game.print();
+    System.out.println("LEFT/RIGHT/UP/DOWN >>");
 
-      game.shift("left");            
-      game.print();     
-      System.out.println("\n");
-      game.shift("down");            
+
+		while((userInput=input.next()) != null){
+      game.shift(userInput);  
       game.print();
-            System.out.println("\n");
-      userInput = "LEFT";
+      System.out.println("LEFT/RIGHT/UP/DOWN >>");
 		}
     System.exit(0);
 	}
+  
 }
