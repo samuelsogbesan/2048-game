@@ -10,9 +10,11 @@ class Main{
       game.print();
       System.out.println("\n");
 
-      game.shift("down");
-            
-      game.print();      
+      game.shift("left");            
+      game.print();     
+      System.out.println("\n");
+      game.shift("down");            
+      game.print();
             System.out.println("\n");
       userInput = "LEFT";
 		}

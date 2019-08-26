@@ -4,7 +4,7 @@ class Game2048{
 	public int[][] grid = new int[][]{
     {0,2,0,2},
     {0,2,0,0},
-    {0,2,0,0},
+    {0,4,0,0},
     {0,2,0,2}
   };
 	public int[][] getGrid(){return this.grid;}
@@ -21,7 +21,6 @@ class Game2048{
         for(int col=0; col<4 ; col++){
           value = this.getValue(row,col);
           System.out.print(value);
-
         }
         System.out.println("");
     }
@@ -32,9 +31,9 @@ class Game2048{
     int colOffset = 0;
 
     switch(direction.toUpperCase()){
-      case "UP":rowOffset = 0;break;
+      case "UP":rowOffset = -1;break;
       case "DOWN":rowOffset = 1;break;
-      case "LEFT":colOffset = 0;break;
+      case "LEFT":colOffset = -1;break;
       case "RIGHT":colOffset = 1;break;
     }
     
@@ -43,25 +42,35 @@ class Game2048{
 
       for(int col=0; col<size;col++){
 
-          if(row == size-1){
+          
+          if((rowOffset==1) && (row == size-1)){
             continue;
-          }        
+          }
+          if((rowOffset==-1)&&(row ==0)){
+            continue;
+          }
+          if((colOffset==1) && (col == size-1)){
+            continue;
+          }      
+          if((colOffset==-1) && (col == 0)){
+            continue;
+          }
+
           int value = this.getValue(row,col);
-          int nextValue = this.getValue(row+rowOffset,col);
+          int nextValue = this.getValue(row+rowOffset,col+colOffset);
 
           if(nextValue==0){
-            this.setValue(value,row+rowOffset,col);
+            this.setValue(value,row+rowOffset,col+colOffset);
             this.setValue(nextValue,row,col);
           }
           else if(nextValue==value){
-            this.setValue(value*2,row+1,col);
+            this.setValue(value*2,row+rowOffset,col+colOffset);
             this.setValue(0,row,col);
           }             
           
       }
 
     }}
-    //merge("");
   }
 	
 
