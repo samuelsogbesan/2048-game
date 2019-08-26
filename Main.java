@@ -7,7 +7,13 @@ class Main{
 		String userInput = player.getMove();
 
 		while((userInput == "RIGHT") && (game.evaluate()) ){
-      game.shift(1);
+      game.print();
+      System.out.println("\n");
+
+      game.shift("down");
+            
+      game.print();      
+            System.out.println("\n");
       userInput = "LEFT";
 		}
     System.exit(0);
