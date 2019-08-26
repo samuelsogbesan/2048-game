@@ -1,6 +1,6 @@
 import java.util.Random;
 
-class Game2048{
+public class Grid{
   private final int size=4;
 
 	public int[][] grid = new int[][]{
