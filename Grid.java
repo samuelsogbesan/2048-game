@@ -8,6 +8,11 @@ public class Grid {
       for (int col = 0; col < grid[0].length; col++) {
         this.grid[row][col] = 0;
       }
+
+      this.grid[3][0] = 2;
+      this.grid[3][1] = 2;
+      this.grid[3][2] = 2;
+      this.grid[3][3] = 2;
     }
     this.spawn();
   }
@@ -35,7 +40,7 @@ public class Grid {
     }
   }
 
-  public int shift(String direction) {
+  public int shift(String direction, boolean merge) {
     int score = 0;
     int rowOffset = 0;
     int colOffset = 0;
@@ -82,10 +87,17 @@ public class Grid {
           if (nextValue == 0) {
             this.setValue(value, row + rowOffset, col + colOffset);
             this.setValue(nextValue, row, col);
-          } else if (nextValue == value) {
-            score += (value * 2);
-            this.setValue(value * 2, row + rowOffset, col + colOffset);
-            this.setValue(0, row, col);
+          }
+
+          if (merge) {
+            if (nextValue == value) {
+              if (i == size - 2) {
+                score += (value * 2);
+                this.setValue(value * 2, row + rowOffset, col + colOffset);
+                this.setValue(0, row, col);
+              }
+
+            }
           }
 
         }
@@ -93,7 +105,6 @@ public class Grid {
       }
     }
 
-    spawn();
     return score;
   }
 
@@ -115,7 +126,7 @@ public class Grid {
     return true;
   }
 
-  public void play(Player player){
+  public void play(Player player) {
 
     System.out.println("Welcome to 2048.");
     this.print();
@@ -123,13 +134,16 @@ public class Grid {
 
     String userInput;
     while ((userInput = player.getMove()) != "") {
-      int score = this.shift(userInput);
+      int score = this.shift(userInput, false);
+      score = this.shift(userInput, true);
+      this.shift(userInput, false);
+      this.spawn();
       player.setScore(player.getScore() + score);
       this.print();
       System.out.println("Score:" + player.getScore());
       System.out.println("LEFT/RIGHT/UP/DOWN >>");
     }
     player.endGame();
-    
+
   }
 }
