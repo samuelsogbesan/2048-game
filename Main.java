@@ -4,8 +4,6 @@ class Main {
     Grid game = new Grid();
     Player player = new Player("James");
     game.play(player);
-
-    
     System.exit(0);
   }
 
