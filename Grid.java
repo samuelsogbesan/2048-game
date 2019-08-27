@@ -155,7 +155,8 @@ public class Grid {
    */
   public void play(Player player) {
 
-    System.out.println("Welcome to 2048.");
+    System.out.println("Welcome to 2048, a Java clone of 2048 made by Samuel Sogbesan");
+    System.out.println("GitHub: https://github.com/samuelsogbesan/2048-game");    
     this.print();
     System.out.println("LEFT/RIGHT/UP/ DOWN >>");
 
