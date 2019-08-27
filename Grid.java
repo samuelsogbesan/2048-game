@@ -1,5 +1,3 @@
-import java.util.Scanner;
-
 public class Grid {
   private final int size = 4;
 
