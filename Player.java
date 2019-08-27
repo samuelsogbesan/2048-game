@@ -1,6 +1,9 @@
+import java.util.Scanner;
+
 class Player {
 	private String name;
 	private int score;
+	private Scanner input = new Scanner(System.in);
 
 	public Player(String name) {
 		this.name = name;
@@ -24,6 +27,15 @@ class Player {
 	}
 
 	public String getMove() {
-		return "RIGHT";
+		return input.next();
+	}
+
+	public void endGame(){
+		try {
+			input.close();
+		  } catch (Exception e) {
+			System.out.println("Error closing Scanner.");
+			System.exit(-1);
+		  }		
 	}
 }

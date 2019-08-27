@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 public class Grid {
   private final int size = 4;
 
@@ -53,6 +55,9 @@ public class Grid {
     case "RIGHT":
       colOffset = 1;
       break;
+    default:
+      System.out.println("Your input was invalid");
+      return 0;
     }
 
     for (int i = 0; i < size - 1; i++) {
@@ -112,4 +117,21 @@ public class Grid {
     return true;
   }
 
+  public void play(Player player){
+
+    System.out.println("Welcome to 2048.");
+    this.print();
+    System.out.println("LEFT/RIGHT/UP/ DOWN >>");
+
+    String userInput;
+    while ((userInput = player.getMove()) != "") {
+      int score = this.shift(userInput);
+      player.setScore(player.getScore() + score);
+      this.print();
+      System.out.println("Score:" + player.getScore());
+      System.out.println("LEFT/RIGHT/UP/DOWN >>");
+    }
+    player.endGame();
+    
+  }
 }
