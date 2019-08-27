@@ -77,8 +77,16 @@ public class Grid{
   }
 	
   private void spawn(){
-    
-    
+    int value = (Math.random() < 0.9 ? 2 : 4);
+    int[] pos = new int[2];
+    pos[0] = (int) (Math.random() * (3-0) +1);
+    pos[1] = (int) (Math.random() * (3-0) +1);
+
+    while(this.getValue(pos[0],pos[1])!=0){
+      pos[0] = (int) (Math.random() * (3-0) +1);
+      pos[1] = (int) (Math.random() * (3-0) +1);      
+    }
+    this.setValue(value, pos[0], pos[1]);
   }
 	public boolean evaluate(){
 
