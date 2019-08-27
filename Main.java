@@ -3,7 +3,7 @@ import java.util.Scanner;
 class Main{
 
 	public static void main(String args[]){
-		Game2048 game = new Game2048();
+		Grid game = new Grid();
 		Player player = new Player("James");
 
 		String userInput = player.getMove();
@@ -15,10 +15,18 @@ class Main{
 
 
 		while((userInput=input.next()) != null){
-      game.shift(userInput);  
+      int score = game.shift(userInput);  
+      player.setScore(player.getScore() + score);
       game.print();
+      System.out.println("Score:"+player.getScore());
       System.out.println("LEFT/RIGHT/UP/DOWN >>");
-		}
+    }
+    try{
+      input.close();
+    }catch(Exception e){
+        System.out.println("Error closing Scanner.");
+        System.exit(-1);
+    }
     System.exit(0);
 	}
   
