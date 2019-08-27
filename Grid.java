@@ -34,7 +34,7 @@ public class Grid {
     for (int row = 0; row < this.size; row++) {
       for (int col = 0; col < this.size; col++) {
         value = this.getValue(row, col);
-        System.out.print(value);
+        System.out.print(value+"\t");
       }
       System.out.println("");
     }
