@@ -1,19 +1,22 @@
+
+/**
+ * Encapsulates main game logic.
+ */
 public class Grid {
   private final int size = 4;
 
   public int[][] grid = new int[this.size][this.size];
 
+  /**
+   * Initialises grid with zeros and spawns first number onto grid.
+   */
   public Grid() {
     for (int row = 0; row < grid.length; row++) {
       for (int col = 0; col < grid[0].length; col++) {
         this.grid[row][col] = 0;
       }
-
-      this.grid[3][0] = 2;
-      this.grid[3][1] = 2;
-      this.grid[3][2] = 2;
-      this.grid[3][3] = 2;
     }
+
     this.spawn();
   }
 
@@ -29,6 +32,9 @@ public class Grid {
     return this.getGrid()[x][y];
   }
 
+  /**
+   * Iterates through grid and prints elements row-by-row
+   */
   public void print() {
     int value;
     for (int row = 0; row < this.size; row++) {
@@ -40,10 +46,15 @@ public class Grid {
     }
   }
 
+  /**
+   * Main game logic.
+   * Shifts grid values one unit in a given direction (no-wrap)
+   * @param direction
+   */
   public int shift(String direction, boolean merge) {
-    int score = 0;
-    int rowOffset = 0;
-    int colOffset = 0;
+    int score = 0; //total score accumulated by player on turn
+    int rowOffset = 0; //amount items will be shifted on the x-axis
+    int colOffset = 0; //amount items will be shifted on the y-axis
 
     switch (direction.toUpperCase()) {
     case "UP":
@@ -63,6 +74,14 @@ public class Grid {
       return 0;
     }
 
+    /*
+      Performs the shift in the specified direction by:
+        For each element in grid (bar the exceptions)
+          Shift element into new position if the adjacent element is a 0
+          otherwise
+          If instructed to merge
+            Compare and if qualified merge items
+    */
     for (int i = 0; i < size - 1; i++) {
       for (int row = 0; row < size; row++) {
 
@@ -82,7 +101,7 @@ public class Grid {
           }
 
           int value = this.getValue(row, col);
-          int nextValue = this.getValue(row + rowOffset, col + colOffset);
+          int nextValue = this.getValue(row + rowOffset, col + colOffset); //value of adjacent element
 
           if (nextValue == 0) {
             this.setValue(value, row + rowOffset, col + colOffset);
@@ -108,6 +127,10 @@ public class Grid {
     return score;
   }
 
+  /**
+   * Adds a random element of value 2 or 4 to the grid at a random unoccupied position.
+   * value = f(x) = {x < 0.9 ? f(x) = 2, otherwise f(x) = 4}
+   */
   private void spawn() {
     int value = (Math.random() < 0.9 ? 2 : 4);
     int[] pos = new int[2];
@@ -126,9 +149,17 @@ public class Grid {
     return true;
   }
 
+
+  /**
+   * Main Game Loop
+   * @param player The Player Object neaged in the game
+   */
   public void play(Player player) {
 
-    System.out.println("Welcome to 2048.");
+    System.out.println("Welcome to 2048, a Java clone of 2048 made by Samuel Sogbesan");
+    System.out.println("GitHub: https://github.com/samuelsogbesan/2048-game");    
+    System.out.println("Linkedin: https://github.com/samuelsogbesan/2048-game"); 
+
     this.print();
     System.out.println("LEFT/RIGHT/UP/ DOWN >>");
 
