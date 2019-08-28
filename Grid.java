@@ -1,10 +1,15 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Stack;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Encapsulates main game logic.
  */
 public class Grid {
   private final int size = 4;
-
+  private ArrayList<int[]> available = new ArrayList<int[]>();
   public int[][] grid = new int[this.size][this.size];
 
   /**
@@ -14,9 +19,17 @@ public class Grid {
     for (int row = 0; row < grid.length; row++) {
       for (int col = 0; col < grid[0].length; col++) {
         this.grid[row][col] = 0;
+        this.available.add(new int[]{row,col});
       }
+      
     }
 
+    /*
+    this.grid[0] = new int[]{2,2,2,2};
+    this.grid[1] = new int[]{4,4,8,4};
+    this.grid[2] = new int[]{2,16,4,2};
+    this.grid[3] = new int[]{0,0,2,0};
+    */
     this.spawn();
   }
 
@@ -106,6 +119,9 @@ public class Grid {
           if (nextValue == 0) {
             this.setValue(value, row + rowOffset, col + colOffset);
             this.setValue(nextValue, row, col);
+            this.available.add(new int[]{row,col});
+            this.available.remove(new int[]{row+rowOffset,col+colOffset});            
+
           }
 
           if (merge) {
@@ -114,6 +130,8 @@ public class Grid {
                 score += (value * 2);
                 this.setValue(value * 2, row + rowOffset, col + colOffset);
                 this.setValue(0, row, col);
+                this.available.add(new int[]{row,col});
+                this.available.remove(new int[]{row+rowOffset,col+colOffset}); 
               }
 
             }
@@ -133,20 +151,67 @@ public class Grid {
    */
   private void spawn() {
     int value = (Math.random() < 0.9 ? 2 : 4);
-    int[] pos = new int[2];
-    pos[0] = (int) (Math.random() * (3 - 0) + 1);
-    pos[1] = (int) (Math.random() * (3 - 0) + 1);
+    
+    
+    //int[] pos = new int[2];
 
+    int pos;
+    if(this.available.size() > 0){
+      pos =(int) (Math.random() * (available.size()-1-0)+1);
+    }else{
+      System.out.println("no free items");
+      return;
+    }
+
+
+    //pos[0] = (int) (Math.random() * (3 - 0) + 1);
+    //pos[1] = (int) (Math.random() * (3 - 0) + 1);
+    
+    /*
     while (this.getValue(pos[0], pos[1]) != 0) {
       pos[0] = (int) (Math.random() * (3 - 0) + 1);
       pos[1] = (int) (Math.random() * (3 - 0) + 1);
-    }
-    this.setValue(value, pos[0], pos[1]);
+    }*/
+    this.setValue(value, this.available.get(pos)[0], this.available.get(pos)[1]);
+    this.available.add(pos, new int[]{-1,-1});
   }
 
   public boolean evaluate() {
+    if(this.available.size() !=0){
+      return true;
+    }
+    for (int row = 0; row < size; row++) {
 
-    return true;
+      //convert int[] to String
+      String c = "";
+      for (int j = 0; j < size; j++) {
+        c = c.concat(String.valueOf(this.grid[row][j]));
+      }
+
+      //System.out.println("string: " + c);
+
+      //If there are repeated non-zero values in row
+      String regex = "^(?!.*(.).*\1)[1-9]+$";
+      //regex = "([1-9]{1})(?(1)\1|)";
+      //regex= "([1-9]{1})(?=\\1{1})";
+      //regex="([0-9])(?=\1)";
+      //regex="[a-z](?=[0-9])";
+      regex="([0-9].*?)(?:\\1)";
+      
+      
+      
+      Pattern p = Pattern.compile(regex);
+      Matcher m = p.matcher(c);
+      if (m.find()){
+        //System.out.println("The string matches regex1");
+        return true;
+      }
+     
+    }
+
+    //System.out.println("no strings matched regex");
+    return false;
+    
   }
 
 
@@ -162,18 +227,27 @@ public class Grid {
 
     this.print();
     System.out.println("LEFT/RIGHT/UP/ DOWN >>");
-
+    //this.evaluate();
+    
+    
     String userInput;
-    while ((userInput = player.getMove()) != "") {
+    while ((this.evaluate()))  {
+      userInput = player.getMove();
       int score = this.shift(userInput, false);
+      System.out.println("good");
       score = this.shift(userInput, true);
+      System.out.println("merge good");
       this.shift(userInput, false);
+      System.out.println("suffle good");
       this.spawn();
+      System.out.println("spawn good");
       player.setScore(player.getScore() + score);
       this.print();
       System.out.println("Score:" + player.getScore());
       System.out.println("LEFT/RIGHT/UP/DOWN >>");
     }
+    
+    System.out.println("Game over");
     player.endGame();
 
   }
