@@ -1,6 +1,4 @@
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,13 +21,7 @@ public class Grid {
       }
       
     }
-
-    /*
-    this.grid[0] = new int[]{2,2,2,2};
-    this.grid[1] = new int[]{4,4,8,4};
-    this.grid[2] = new int[]{2,16,4,2};
-    this.grid[3] = new int[]{0,0,2,0};
-    */
+    this.spawn();
     this.spawn();
   }
 
@@ -163,15 +155,6 @@ public class Grid {
       return;
     }
 
-
-    //pos[0] = (int) (Math.random() * (3 - 0) + 1);
-    //pos[1] = (int) (Math.random() * (3 - 0) + 1);
-    
-    /*
-    while (this.getValue(pos[0], pos[1]) != 0) {
-      pos[0] = (int) (Math.random() * (3 - 0) + 1);
-      pos[1] = (int) (Math.random() * (3 - 0) + 1);
-    }*/
     this.setValue(value, this.available.get(pos)[0], this.available.get(pos)[1]);
     this.available.add(pos, new int[]{-1,-1});
   }
@@ -203,13 +186,11 @@ public class Grid {
       Pattern p = Pattern.compile(regex);
       Matcher m = p.matcher(c);
       if (m.find()){
-        //System.out.println("The string matches regex1");
         return true;
       }
      
     }
 
-    //System.out.println("no strings matched regex");
     return false;
     
   }
@@ -227,20 +208,19 @@ public class Grid {
 
     this.print();
     System.out.println("LEFT/RIGHT/UP/ DOWN >>");
-    //this.evaluate();
     
     
     String userInput;
+    int score = 0;
     while ((this.evaluate()))  {
       userInput = player.getMove();
-      int score = this.shift(userInput, false);
-      System.out.println("good");
-      score = this.shift(userInput, true);
-      System.out.println("merge good");
-      this.shift(userInput, false);
-      System.out.println("suffle good");
+
+      score = this.shift(userInput, false); //slide
+      score = this.shift(userInput, true); //merge
+      this.shift(userInput, false); //slide
+
       this.spawn();
-      System.out.println("spawn good");
+
       player.setScore(player.getScore() + score);
       this.print();
       System.out.println("Score:" + player.getScore());
@@ -248,6 +228,7 @@ public class Grid {
     }
     
     System.out.println("Game over");
+    System.out.println("Your final score was "+player.getScore());
     player.endGame();
 
   }
